@@ -10,16 +10,11 @@
       </v-tab>
 
       <v-tab to="/talk">
-        <v-badge
-          color="red"
-          dot
-        >
           <v-icon size="24px">mdi-email</v-icon>
-        </v-badge>
       </v-tab>
 
       <v-tab to="/about">
-          About
+      <v-icon size="24px">mdi-account-circle</v-icon>
       </v-tab>
     </v-tabs>
 

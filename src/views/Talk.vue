@@ -106,6 +106,7 @@ export default class Talk extends Vue {
   fulldatetime = "";
   showDialog = false;
   show = false;
+  p_id = "";
 
   //time
   rintDate() {
@@ -133,7 +134,7 @@ export default class Talk extends Vue {
   getPosts() {
     try {
       firestore
-        .collection("posts")
+        .collection("posts").orderBy("timestamp","desc")
         .onSnapshot((querySnapshot) => {
           this.posts = [];
           querySnapshot.forEach((doc) => {
@@ -143,6 +144,8 @@ export default class Talk extends Vue {
               timeP: doc.data()["timeP"],
               post_Status: doc.data()["post_Status"],
             });
+            this.p_id = doc.id;
+            
           });
         });
     } catch (e) {
@@ -160,6 +163,7 @@ export default class Talk extends Vue {
           post: this.textP,
           timeP: this.rintDate() + " " + this.printTime(),
           post_Status: true,
+          timestamp: this.printFullDate(),
         })
         .then((docRef) => {
           console.log("Document written with ID: ", docRef.id);
@@ -167,7 +171,7 @@ export default class Talk extends Vue {
             .collection("posts")
             .doc(docRef.id)
             .update({
-              u_id: docRef.id,
+              p_id: docRef.id,
             })
             .then(function () {
               console.log("updated sussuc");

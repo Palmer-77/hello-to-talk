@@ -5,6 +5,7 @@
     max-width="100%"
     rounded
     @click="selectPost(p_id), viewComment()"
+    v-bind:href="'/post/'+p_id"
   >
     <v-list-item-avatar color="grey darken-3 ml-3">
       <v-img
@@ -24,10 +25,8 @@
       </center></v-card-title
     >
     <v-divider class="mr-5 ml-5"></v-divider>
-    <div>
-      <Comment
-        :post_id="post_id"
-      />
+    <div light v-for="comM in comments_Data" :key="comM">
+      ID {{ comM.c_id }} ข้อมูล {{ comM.comment }}
     </div>
     <v-card-text class="text-center">
       <v-dialog :v-model="showComment" width="95%" dark>
@@ -76,7 +75,6 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { firestore } from "@/firebase";
-import Comment from "@/components/Comments/Comment.vue";
 
 const detail_Post = Vue.extend({
   props: {
@@ -103,12 +101,12 @@ interface dataComment {
 
 @Component({
   components: {
-    Comment,
+    
   },
 })
 export default class Post extends detail_Post {
   posts: dataPost[] = [];
-  comments: dataComment[] = [];
+  comments_Data: dataComment[] = [];
   post_id = "";
   showComment = false;
   textC = "";
@@ -137,8 +135,9 @@ export default class Post extends detail_Post {
         .collection("comments")
         .add({
           comment: this.textC,
-          timeC: this.printTime() + "" + this.rintDate(),
+          timeC: this.printTime() + " " + this.rintDate(),
           post_id: "" + this.p_id,
+          timestamp: this.printFullDate(),
         })
         .then((docRef) => {
           console.log("Document written with ID: ", docRef.id);
@@ -175,7 +174,6 @@ export default class Post extends detail_Post {
 
   mounted() {
     this.setDataPost();
-    
   }
 }
 </script>
