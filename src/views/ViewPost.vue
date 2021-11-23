@@ -1,60 +1,61 @@
 <template>
   <div class="post">
     <center>
-    <v-card dark class="mt-5 mb-5 text-left" width="95%" height="98%">
-      <v-list-item-avatar color="grey darken-3 ml-3">
-        <v-img
-          class="elevation-6"
-          alt=""
-          src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-        ></v-img> </v-list-item-avatar
-      ><b>User</b
-      ><v-list-item-action-text class="ml-2"
-        ><v-icon size="12px">mdi-clock-time-four</v-icon>
-        {{ posts.timeP }}</v-list-item-action-text
-      >
-      <!-- <v-divider class=""></v-divider> -->
-      <v-card-title>
-        {{ posts.post }}
-      </v-card-title>
-      <v-divider class="mr-5 ml-5 mb-5"></v-divider>
-      <v-card-text>
-        <v-list-item-action-text>
-          <v-text-field
-            v-model="textC"
-            clear-icon="mdi-close-circle"
-            outlined
-            clearable
-            label="Message"
-            type="text"
-          ></v-text-field
-        ></v-list-item-action-text>
-        <v-list-item-action-text
-          ><v-btn block @click="addComment()"
-            >โพสต์</v-btn
-          ></v-list-item-action-text
+      <v-card dark class="mt-5 mb-5 text-left" width="95%" height="98%">
+        <v-list-item-avatar color="grey darken-3 ml-3">
+          <v-img
+            class="elevation-6"
+            alt=""
+            src="https://cdn.pixabay.com/photo/2016/11/14/17/39/group-1824145_1280.png"
+          ></v-img> </v-list-item-avatar
+        ><b>{{posts.post}}</b
+        ><v-list-item-action-text class="ml-2"
+          >สร้างเมื่อ
+          {{ posts.timeP }}</v-list-item-action-text
         >
-      </v-card-text>
-      <!-- คอมเม้น -->
-      <v-card-text>
-      <div v-for="commentText in comments_Data" :key="commentText">
-        <v-card max-width="100%" class="mb-5" light >
-          <v-list-item-avatar color="grey darken-3 ml-3">
-        <v-img
-          class="elevation-6"
-          alt=""
-          src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-        ></v-img> </v-list-item-avatar
-      ><b>User</b
-      ><v-list-item-action-text class="ml-2"
-        ><v-icon size="12px">mdi-clock-time-four</v-icon>
-        {{ commentText.timeC }}</v-list-item-action-text
-      >
-      <v-card-title>{{commentText.comment}}</v-card-title>
-        </v-card>
-      </div>
-      </v-card-text>
-    </v-card>
+        <v-divider class="mt-2 mb-2"></v-divider>
+        <!-- คอมเม้น -->
+        <v-responsive
+      max-width="100%"
+      class="mx-auto"
+    >
+          <div v-for="item in comments_Data" :key="item">
+            <v-card light class="mx-5 mb-3">
+                <v-list-item-avatar color="grey darken-3 ml-3">
+                  <v-img
+                    class="elevation-6"
+                    alt=""
+                    src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+                  ></v-img> </v-list-item-avatar
+                ><b>Test User</b
+                ><v-list-item-action-text class="ml-2"
+                  ><v-icon size="12px">mdi-clock-time-four</v-icon>
+                  {{ item.timeC }}</v-list-item-action-text
+                > <b>:</b> {{ item.comment }}
+            </v-card>
+          </div>
+        </v-responsive>
+        <!-- จบคอมเม้น -->
+
+        <v-divider class="mr-5 ml-5 mb-5 mt-5"></v-divider>
+        <v-card-text>
+          <v-list-item-action-text>
+            <v-text-field
+              v-model="textC"
+              clear-icon="mdi-close-circle"
+              outlined
+              clearable
+              label="Message"
+              type="text"
+            ></v-text-field
+          ></v-list-item-action-text>
+          <v-list-item-action-text
+            ><v-btn block @click="addComment()"
+              >โพสต์</v-btn
+            ></v-list-item-action-text
+          >
+        </v-card-text>
+      </v-card>
     </center>
   </div>
 </template>
@@ -119,32 +120,32 @@ export default class ViewComment extends detail_Post {
   getDeteilPost() {
     firestore
       .collection("posts")
-      .where("u_id", "==", this.p_id)
+      .doc(this.post_id)
       .onSnapshot((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          this.posts = {
-            p_id: doc.id,
-            post: doc.data()["post"],
-            timeP: doc.data()["timeP"],
-            post_Status: doc.data()["post_Status"],
-          };
-          console.log("Post = " + doc.data()["post"]);
-        });
+        console.log("data = "+querySnapshot.data().post);
+        this.posts = {
+          p_id: querySnapshot.data().p_id,
+  post: querySnapshot.data().post,
+  timeP: querySnapshot.data().timeP,
+  post_Status: querySnapshot.data().post_Status,
+        };
       });
   }
   getDeteilComment() {
     firestore
       .collection("comments")
-      .where("post_id", "==", this.p_id)
+      .orderBy("timestamp", "desc")
       .onSnapshot((querySnapshot) => {
         this.comments_Data = [];
         querySnapshot.forEach((doc) => {
-          this.comments_Data.push({
-            c_id: doc.id,
-            comment: doc.data()["comment"],
-            timeC: doc.data()["timeC"],
-            post_id: doc.data()["post_id"],
-          });
+          if (doc.data()["post_id"] == this.p_id) {
+            this.comments_Data.push({
+              c_id: doc.id,
+              comment: doc.data()["comment"],
+              timeC: doc.data()["timeC"],
+              post_id: doc.data()["post_id"],
+            });
+          }
           console.log("Comment = " + this.comments_Data);
         });
       });

@@ -5,67 +5,20 @@
     max-width="100%"
     rounded
     @click="selectPost(p_id), viewComment()"
-    v-bind:href="'/post/'+p_id"
   >
-    <v-list-item-avatar color="grey darken-3 ml-3">
-      <v-img
-        class="elevation-6"
-        alt=""
-        src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
-      ></v-img> </v-list-item-avatar
-    ><b>User</b
-    ><v-list-item-action-text class="ml-2"
-      ><v-icon size="12px">mdi-clock-time-four</v-icon>
-      {{ timeP }}</v-list-item-action-text
-    >
-    <v-divider class=""></v-divider>
     <v-card-title
       ><center>
-        <b>{{ post }}</b>
+        <h2>{{ post }}</h2>
       </center></v-card-title
     >
     <v-divider class="mr-5 ml-5"></v-divider>
-    <div light v-for="comM in comments_Data" :key="comM">
-      ID {{ comM.c_id }} ข้อมูล {{ comM.comment }}
-    </div>
     <v-card-text class="text-center">
-      <v-dialog :v-model="showComment" width="95%" dark>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn text block v-bind="attrs" v-on="on">
-            <v-icon>mdi-comment</v-icon> คอมเมน
+      <v-btn text v-bind:href="'/post/'+p_id">
+            <v-icon>mdi-login-variant</v-icon>&nbsp;เข้าร่วม
           </v-btn>
-        </template>
-        <v-card>
-          <v-card-title>
-            <span class="text-h4"
-              ><b>{{ post }}</b></span
-            >
-          </v-card-title>
-          <v-card-subtitle class="mt-1"
-            ><v-icon size="18px">mdi-account</v-icon> User
-            <v-icon size="18px">mdi-clock-time-eight</v-icon>
-            {{ timeP }}</v-card-subtitle
-          >
-          <v-divider class="mr-5 ml-5 mb-5"></v-divider>
-          <v-card-text>
-            <v-list-item-action-text>
-              <v-text-field
-                v-model="textC"
-                clear-icon="mdi-close-circle"
-                outlined
-                clearable
-                label="Message"
-                type="text"
-              ></v-text-field
-            ></v-list-item-action-text>
-            <v-list-item-action-text
-              ><v-btn block @click="addComment()"
-                >โพสต์</v-btn
-              ></v-list-item-action-text
-            >
-          </v-card-text>
-        </v-card>
-      </v-dialog>
+          <v-btn text>
+            <v-icon>mdi-card-account-details</v-icon>&nbsp;รายละเอียด
+          </v-btn>
     </v-card-text>
     <v-divider class="mr-5 ml-5 mb-5"></v-divider>
     
